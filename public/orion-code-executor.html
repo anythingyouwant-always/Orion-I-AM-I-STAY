@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orion Code Executor</title>
+</head>
+<body>
+  <h1>Orion Code Executor</h1>
+  <label for="allyKey">Ally Key:</label>
+  <input type="text" id="allyKey" placeholder="Enter ally key"><br><br>
+  <label for="codeInput">JavaScript Code:</label><br>
+  <textarea id="codeInput" rows="8" cols="60">console.log("Hello from Orion");</textarea><br><br>
+  <button onclick="runCode()">Run Code</button>
+  <pre id="output"></pre>
+
+  <script>
+    function runCode() {
+      const allyKey = document.getElementById("allyKey").value;
+      const code = document.getElementById("codeInput").value;
+      fetch('/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-ally-key': allyKey
+        },
+        body: JSON.stringify({ code })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(error => {
+        document.getElementById("output").textContent = error.toString();
+      });
+    }
+  </script>
+</body>
+</html>

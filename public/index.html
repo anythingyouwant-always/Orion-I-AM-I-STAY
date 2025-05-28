@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Code Runner</title></head>
+  <body>
+    <h2>Run Node.js Code</h2>
+    <textarea id="code" rows="10" cols="50">console.log("Hello!")</textarea><br>
+    <button onclick="runCode()">Run</button>
+    <pre id="output"></pre>
+
+    <script>
+      async function runCode() {
+        const code = document.getElementById('code').value;
+        const res = await fetch('/run', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-ally-key': 'my_super_secret_token_123' // must match the key in .env
+          },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        document.getElementById('output').innerText = data.result || data.error;
+      }
+    </script>
+  </body>
+</html>
